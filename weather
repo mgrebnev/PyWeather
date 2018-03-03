@@ -1,6 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""
+    Author: mgrebnev
+    Guthub: https://github.com/mgrebnev/PyWeather
+
+    How to use:
+         $ chmod +x weather
+        ./weather -c %woeid_code%
+
+    WOEID location list http://www.woeidlookup.com/
+
+    Example
+        $ ./weather -c 2122265
+        Moscow, -9.4 C°, Cloudy
+"""
+
 import commands
 import json
 import urllib
