@@ -1,0 +1,2 @@
+# PyWeather
+Console weather app
