@@ -1,0 +1,42 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import commands
+import json
+import urllib
+import sys
+
+def getJSONByUrl(url):
+    return json.loads(urllib.urlopen(url).read());
+
+def getCelsiusByFahrenheit(c):
+    return round((c - 32) / 1.8,1);
+
+def getCountryCode():
+    consoleArgs = sys.argv;
+    if len(consoleArgs) == 3:
+        if consoleArgs[1] == "-c":
+            return consoleArgs[2]
+
+countryCode = getCountryCode();
+if countryCode == None:
+    print "Error, set -c (country) param"
+    exit();
+
+mainURL = "https://query.yahooapis.com/v1/public/yql"
+yql = "select item.condition, location from weather.forecast where woeid = {}".format(countryCode);
+_request=mainURL+ "?q=" + yql + "&format=json";
+
+try:
+    jsonResponse = getJSONByUrl(_request);
+    results = jsonResponse['query']['results'];
+    if results != "null" and results != None:
+        city = jsonResponse['query']['results']['channel']['location']['city'];
+        condition = jsonResponse['query']['results']['channel']['item']['condition'];
+        temperature = getCelsiusByFahrenheit(int(condition['temp']));
+        info = condition['text'];
+        print "{}, {} C°, {}".format(city,temperature,info);
+    else:
+        print "Unknown country code"
+except Exception as e:
+    print "Error: " + e.message;
